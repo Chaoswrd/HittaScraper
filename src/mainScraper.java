@@ -15,7 +15,6 @@ public class mainScraper {
 	static int searchResults;
 	
 	public static void main(String[] args) {
-		
 		System.out.println("Starting...");
 		System.out.println("Setting arguments...");
 		try{
@@ -28,26 +27,38 @@ public class mainScraper {
 		}catch(NumberFormatException e){
 			System.err.println("!!!The third argument is not how many search results the category includes!!!");
 		}
-		
-		run(city, url);
+		run(city, url, args);
 		System.out.println("Finished!");
 	}
 	
+	/* 
+	 * Function that takes all the titles from one of the webpages and returns them as an arraylist
+	 * */
 	public static ArrayList<String> getTitles(String url){
+		//The list that shall be returned from the function
 		ArrayList<String> returnList = new ArrayList<String>();
+		//HTML Document of the webpage
 		Document doc = null;
+		
 		try {
+			//Connecting to the webpage with assigned url
 			doc = Jsoup.connect(url).get();
 			System.out.println("Connected to url!");
 		} catch (IOException e) {
+			//If connection does not work
 			e.printStackTrace();
 			System.err.println("!!!Invalid URL!!!");
 		}
+		
+		//The spans that hold the titles 
 		Elements hTwos = doc.select("span[class=result-row__item-hover-visualizer]");
 		System.out.println("Adding titles to Arraylist...");
+		
+		//Adds the titles from the spans to the returning arraylist
 		for(Element hTwo: hTwos){
 			returnList.add(hTwo.text());
 		}
+		
 		return returnList;
 	}
 	
@@ -66,7 +77,9 @@ public class mainScraper {
 		
 	}
 	
-	public static void run(String city, String url){
+	public static void run(String city, String url, String[] args){
+		
+		
 		try {
 			System.out.println("Clearing file...");
 			writer = new BufferedWriter( new FileWriter("/Users/chaosward/Desktop/HittaResultat-"+city+".txt"));
